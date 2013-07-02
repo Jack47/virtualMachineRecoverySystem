@@ -7,7 +7,7 @@ import kvm
 import unix
 import vmrsConfig
  
-class MonitorCmd(object):
+class vmMonitorCmd(object):
 	USE_VM_CMD_TO_REBOOT_SHUTDOWN = True
 	def __init__(self, vmname, hostinfo):
 		self.vmname = vmname	

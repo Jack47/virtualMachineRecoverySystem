@@ -20,9 +20,20 @@ if False:
 
 import textwrap
 import volatility.conf as conf
+import os
+import logging
+import pdb
 #config = conf.ConfObject()
+# must be put before  registry
 import volatility.constants as constants
+
+profile_path="/root/csd/virtualMachineRecoverySystem/vol-profile/"
+argv = ['main.py','--plugins='+profile_path] 
+argvt = sys.argv  
+sys.argv = argv
 import volatility.registry as registry
+sys.argv = argvt
+
 import volatility.exceptions as exceptions
 import volatility.obj as obj
 import volatility.debug as debug
@@ -68,9 +79,11 @@ class VmInspection(object):
 	   self._ExecuteCommand(vmname, "linux_dump_proc_map",pname, outfile )
 
 	def _ExecuteCommand(self, vmname, command, pname = None, outfile=None):
-	    location = "-l vmi://"+vmname;
-	    
-	    argv = self.profile+" "+location+" ";
+	    location = " -l vmi://"+vmname;
+	    profile = " --profile "+self.profile 
+	    #argv = self.plugin+profile+location+" ";
+	    argv = profile+location+" ";
+	   # pdb.set_trace()
 	    if pname :
 		argv+="-n "+pname+" "
 	    if outfile :
@@ -140,7 +153,7 @@ class VmInspection(object):
 	    registry.register_global_options(self.config, addrspace.BaseAddressSpace)
 	    registry.register_global_options(self.config, commands.Command)
 
-		# Reset the logging level now we know whether debug is set or not
+	# Reset the logging level now we know whether debug is set or not
 	    debug.setup(self.config.DEBUG)
 	    
 	    #pdb.set_trace()
