@@ -5,8 +5,11 @@
 from threading import Thread
 import pdb
 import sys
+import logging
+from vmMonitorCmd import VmMonitorCmd
 from vmMonitorCfg import VmMonitorCfg
 from vmCmdsHistory import VmCmdsHistory
+import kvm
 
 class VmRecoveryPolicy(object):
 	VM_RESTART_LIMIT = 1
@@ -56,7 +59,7 @@ class VmRecoveryPolicy(object):
 		for (vm, status) in sorted(validVmStatusDict.items()):
 			cfg = self.cfgsDict[vm]
 
-			cmd = MonitorCmd(vm, cfg.GetHostInfo())	
+			cmd = VmMonitorCmd(vm, cfg.GetHostInfo())	
 			if status.ProfileValid :
 				if status.VmState == kvm.SHUTOFF :
 					self._StartVM(self.vmStatusHistoryDict[vm], cmd)	

@@ -23,18 +23,18 @@ class VmRecoverySystem(object):
 	def Execute_forever(self):
 	
 		while True:
-			#validVmStatusDict = self.vmMonitor.Execute()
+			validVmStatusDict = self.vmMonitor.Execute()
 			
-			#for(vm, vmStatus) in sorted(validVmStatusDict.items()):
-			#	logging.info("Vm checked status:"+vm+"\n"+vmStatus.ToString())
+			for(vm, vmStatus) in sorted(validVmStatusDict.items()):
+				logging.info("Vm checked status:"+vm+"\n"+vmStatus.ToString())
 
-			#monitorCmds = self.vmRecoveryPolicy.Execute(validVmStatusDict)
+			monitorCmds = self.vmRecoveryPolicy.Execute(validVmStatusDict)
 
-			#for(vm, cmd) in sorted(monitorCmds.items()):
-			#	logging.info("Vm cmd:"+vm+"\n"+cmd.ToString())
+			for(vm, cmd) in sorted(monitorCmds.items()):
+				logging.info("Vm cmd:"+vm+"\n"+cmd.ToString())
 
-			#for (vmname, cmd) in sorted(monitorCmds.items()):
-			#	cmd.Execute()	
+			for (vmname, cmd) in sorted(monitorCmds.items()):
+				cmd.Execute()	
 			logging.info("sleep 70")
 			time.sleep(70)
 			

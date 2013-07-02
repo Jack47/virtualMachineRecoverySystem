@@ -6,8 +6,10 @@ from threading import Thread
 import kvm
 import unix
 import vmrsConfig
+import logging
+import time
  
-class vmMonitorCmd(object):
+class VmMonitorCmd(object):
 	USE_VM_CMD_TO_REBOOT_SHUTDOWN = True
 	def __init__(self, vmname, hostinfo):
 		self.vmname = vmname	
@@ -34,7 +36,7 @@ class vmMonitorCmd(object):
 		if	self.isStartVM :
 			try:
 				t = Thread(target=self._StartVM(), args=())
-				t.daemon = THREAD_DAEMON_MOD
+				t.daemon = vmrsConfig.THREAD_DAEMON_MOD
 				t.start()
 			except Exception, errtxt:
 				logging.error(errtxt)
@@ -42,7 +44,7 @@ class vmMonitorCmd(object):
 		elif self.isRestoreSnapShot:
 			try:
 				t = Thread(target=self._RestoreVM(), args=())
-				t.daemon = THREAD_DAEMON_MOD
+				t.daemon = vmrsConfig.THREAD_DAEMON_MOD
 				t.start()
 			except Exception, errtxt:
 				logging.error(errtxt)
@@ -50,14 +52,14 @@ class vmMonitorCmd(object):
 		elif self.isRestartVM:
 			try:
 				t = Thread(target=self._RestartVM(), args=())
-				t.daemon = THREAD_DAEMON_MOD
+				t.daemon = vmrsConfig.THREAD_DAEMON_MOD
 				t.start()
 			except Exception, errtxt:
 				logging.error(errtxt)
 		elif len(self.restartCmds)>0 :
 			try:
 				t = Thread(target=self._RestartProcesses, args=())
-				t.daemon = THREAD_DAEMON_MOD
+				t.daemon = vmrsConfig.THREAD_DAEMON_MOD
 				t.start()
 			except Exception, errtxt:
 				logging.error(errtxt)

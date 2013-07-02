@@ -5,8 +5,9 @@
 
 from threading import Thread
 import vmrsConfig
+import kvm
 
- class VmCheckStatus(object):
+class VmCheckStatus(object):
 		
 	def __init__(self):
 		self.state = kvm.RUNNING	

@@ -8,7 +8,9 @@ import sys
 import kvm
 import unix
 import logging
+import volatility.exceptions as exceptions
 from vmInspection import VmInspection
+from vmCheckStatus import VmCheckStatus
 
 class VmMonitor(object):
 	vmcfgs = {}
