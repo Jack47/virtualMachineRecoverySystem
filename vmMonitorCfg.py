@@ -30,8 +30,8 @@ class VmMonitorCfg(object):
 		vmCheckCfgList = []
 		vms = dom.getElementsByTagName("vm")	
 		for vm in vms:
-			profile = "--profile=Linuxcentos5_5x86"
-			#profile = vm.getElementsByTagName("profile")[0].childNodes[0].data
+			#profile = "--profile=Linuxcentos5_5x86"
+			profile = vm.getElementsByTagName("profile")[0].childNodes[0].data
 			user = vm.getElementsByTagName("username")[0].childNodes[0].data
 			password = vm.getElementsByTagName("password")[0].childNodes[0].data
 			ip = vm.getElementsByTagName("ip")[0].childNodes[0].data
