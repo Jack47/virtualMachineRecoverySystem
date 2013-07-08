@@ -29,7 +29,7 @@ class VmCmdsHistory(object):
 
 	def _ClearRestartProcess(self, clearCount=True):
 		for(k, v) in sorted(self.rpmap.items()):
-			v = 0
+			self.rpmap[k] = 0
 
 	def AddRestartProcess(self, pname):
 		if pname not in self.rpmap:

@@ -65,11 +65,16 @@ class VmRecoveryPolicy(object):
 					self._StartVM(self.vmStatusHistoryDict[vm], cmd)	
 				elif(status.SystemCallHooked or status.RootKitScanned):
 					self._RestoreSnapShot(self.vmStatusHistoryDict[vm],cmd)
-				elif(len(status.ZombieProcesses) !=0):
-					self._RestartVM(self.vmStatusHistoryDict[vm],cmd)
-				elif(len(status.MissingProcesses) !=0):
+				elif(len(status.ZombieProcesses) !=0 or len(status.MissingProcesses) !=0):
+					missingProcesses = []
+					for p in status.ZombieProcesses:
+						if p not in status.MissingProcesses:
+							missingProcesses.append(p)
 					#pdb.set_trace()	
-					self.ProcessMissingProcess(vm, status.MissingProcesses, cmd)
+					for p in status.MissingProcesses:
+						missingProcesses.append(p)
+
+					self.ProcessAbnormalProcess(vm, missingProcesses, cmd)
 				else : 
 					self.vmStatusHistoryDict[vm].Clear()
 							
@@ -77,7 +82,7 @@ class VmRecoveryPolicy(object):
 			cmdsDict[vm] = cmd	
 
 		return cmdsDict
-	def ProcessMissingProcess(self, vmname, missingProcessList, cmd):
+	def ProcessAbnormalProcess(self, vmname, missingProcessList, cmd):
 		cfg = self.cfgsDict[vmname]
 		monitorProcessMap = cfg.GetMonitorProcessMap()
 		logging.info(monitorProcessMap)	

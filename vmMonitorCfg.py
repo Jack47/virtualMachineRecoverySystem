@@ -15,6 +15,8 @@ class VmMonitorCfg(object):
 
 	def GetMonitorProcessMap(self):
 		return self.processMap;
+	def GetLogFile(self):
+		return self.logfile
 	def GetVmName(self):
 		return self.vmname
 	def GetHostInfo(self):
@@ -45,8 +47,9 @@ class VmMonitorCfg(object):
 			for p in pitems:
 				pname = p.attributes['name'].value
 				ploc = p.attributes['path'].value
+				plog = p.attributes['log'].value
 				paction = p.childNodes[0].data
-				pmap[pname] = (paction, ploc);
+				pmap[pname] = (paction, ploc, plog);
 				#print " "+pname+" "+pmap[pname]
 			vname = vm.attributes['name'].value
 			print " "+vname+" "+profile	

@@ -7,10 +7,13 @@ import pdb
 import sys
 import kvm
 import unix
+import os.path as path
+import time
 import logging
 import volatility.exceptions as exceptions
 from vmInspection import VmInspection
 from vmCheckStatus import VmCheckStatus
+import vmrsConfig
 
 class VmMonitor(object):
 	vmcfgs = {}
@@ -64,8 +67,39 @@ class VmMonitor(object):
 
 	def CheckZombieProcesses(self, vmname):
 	#	self.vmInspection.DumpProcess(vmname, "sshd", self.vmcfgs[vmname].Profile)
-		return []
+		zombieProcesses = []
+		pmap = self.vmcfgs[vmname].GetMonitorProcessMap()	
+		logDict = {}
+		for(k,v) in sorted(pmap.items()):
+			if not v[2] == "":
+				logDict[v[2]] = k	
 
+		try:
+			if logDict:
+				h = unix.Remote()
+				hostinfo = self.vmcfgs[vmname].GetHostInfo()
+				h.connect(hostinfo['ip'], username=hostinfo['username'], password=hostinfo['password'])
+			for(logfile,processname) in sorted(logDict.items()):# iterate the valid logfile
+				if self._check_zombie_log(logfile, h):
+					zombieProcesses.append(processname)
+		except Exception, errtxt:
+				logging.error(errtxt)
+
+		return zombieProcesses
+	def _check_zombie_log(self, logfile, host):
+		result = False
+		try:
+			cmd = "echo $(( $(date +%s) - $(stat -c '%Y' {0}) ))".format(logfile)
+
+			info = host.execute(cmd)	
+
+			if(int(info[1]) > vmrsConfig.LOG_FILE_ZOMBIE_TIME):
+				result = True	
+		except Exception, errtxt:
+				logging.error(errtxt)
+				result = False
+		return result
+		
 	def CheckVMMissingProcesses(self, vmname):
 		logging.info("\t Checking VM missing Processes")		
 		vmMissingProcess = []
