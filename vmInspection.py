@@ -57,10 +57,11 @@ class VmInspection(object):
 	   
 	def GetProcessName(self, vmname, profile):
 	   self.profile = profile
-	   data = self._ExecuteCommand(vmname, "linux_pslist")
+	   #data = self._ExecuteCommand(vmname, "linux_pslist")
+	   data = self._ExecuteCommand(vmname, "linux_psaux")
 	   list = []
-	   for task in data:
-		list.append(str(task.comm))
+	   for name in data:# task, name
+		list.append(str(name))
 	   return list
 		
 	def GetProcesses(self, vmname, profile):

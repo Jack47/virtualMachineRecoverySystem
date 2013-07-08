@@ -76,9 +76,13 @@ class VmMonitor(object):
 			monitorPlist.append(k)
 
 		for p in monitorPlist:
-			if not p in vmpList:
+			found = False
+			for pfullname in vmpList:
+				if pfullname.find(p)>=0 :
+					found = True
+					break
+			if(not found):
 				vmMissingProcess.append(p)
-
 		return vmMissingProcess 
 	def GetVMProcesses(self, vmname):
 		vmProcesses = self.vmInspection.GetProcesses(vmname, self.vmcfgs[vmname].Profile)
